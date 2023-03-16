@@ -1,4 +1,4 @@
-const { User, Course, Student } = require('../models');
+const { User} = require('../models');
 
 module.exports = {
 // Get all users
@@ -35,27 +35,28 @@ res.status(400).json(err);
 
 // Create a new user
 createUser(req, res) {
-User.create(req.body)
-.then((user) => res.json(user))
-.catch((err) => {
-console.log(err);
-return res.status(500).json(err);
+    User.create(req.body)
+        .then((user) => res.json(user))
+        .catch((err) => {
+        console.log(err);
+    return res.status(500).json(err);
 });
 },
 
 // Delete a user
 deleteUser(req, res) {
-User.findOneAndDelete({ _id: req.params.userId })
-.then((user) => {
-if (!user) {
-res.status(404).json({ message: 'No user with that ID' });
-} else {
-return Student.deleteMany({ _id: { $in: user.students } });
-}
-})
-.then(() => res.json({ message: 'User is deleted!' }))
-.catch((err) => res.status(500).json(err));
-},
+    User.findOneAndDelete({ _id: req.params.userId })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({ message: 'No user with that ID' });
+        } else {
+          return Thought.deleteMany({ username: user.username });
+        }
+      })
+      .then(() => res.json({ message: 'User and associated thoughts are deleted!' }))
+      .catch((err) => res.status(500).json(err));
+  },
+  
 
 // Update a user
 updateUser(req, res) {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const thoughtController = require('../../controllers/thought-controller');
+const thoughtController = require('../../controllers/thoughtController');
 
 router.get('/api/thoughts', thoughtController.getAllThoughts);
 router.get('/api/thoughts/:id', thoughtController.getThoughtById);
