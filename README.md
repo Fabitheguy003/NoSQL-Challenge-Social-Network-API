@@ -101,7 +101,7 @@ Testing restful API calls with Insomnia Core
 **`/api/thoughts/:thoughtId/reactions/:reactionId`**
 * `DELETE` remove a reaction by the `reactionId` 
 
-## License Details: 
+## Licence: 
  This project is under no license.  
 
 ## Submission:
