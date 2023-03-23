@@ -75,34 +75,36 @@ module.exports = {
             res.status(500).json(error);
         });
     },
-    // Delete a user
-    deleteUser(req, res) {
-        User.findOneAndDelete({_id: req.params.userId})
-            .then((user) => {
-                if (!user) {
-                    res.status(404).json({
-                        message: 'No user with that ID'
-                    });
-                } else {
-                    Thought.deleteMany({_id: {$in: user.thoughts}});
-                };
-            })
-            .then((thought) => {
-                if (!thought) {
-                    res.status(404).json({
-                        message: 'User deleted successfully, but no thoughts found'
-                    });
-                } else {
-                    res.json({
-                        message: 'User successfully deleted'
-                    });
-                };
-            })
-            .catch((error) => {
-                console.log(error);
-                res.status(500).json(error);
-            });
-    },
+// Delete a user
+deleteUser(req, res) {
+    User.findOneAndDelete({ _id: req.params.userId })
+      .then((user) => {
+        if (!user) {
+          res.status(404).json({
+            message: 'No user with that ID',
+          });
+        } else {
+          return Thought.deleteMany({ _id: { $in: user.thoughts } });
+        }
+      })
+      .then((thought) => {
+        if (!thought || thought.deletedCount === 0) {
+          return res.status(404).json({
+            message: 'User deleted successfully, but no thoughts found',
+          });
+        } else {
+          return res.json({
+            message: 'User and associated thoughts successfully deleted',
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json(error);
+      });
+  },
+  
+
     // Add a friend
     addFriend(req, res) {
         User.findOneAndUpdate(
